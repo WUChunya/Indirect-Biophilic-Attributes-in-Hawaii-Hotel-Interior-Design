@@ -1,0 +1,53 @@
+# Every user-visible default of the pipeline. Paths are relative to the repository root.
+
+paths:
+  raw_reviews: data/raw/reviews_booking_waikiki_2020-2023.xlsx
+  raw_bdia: data/raw/bdia_coding_36_hotels.xlsx
+  photos: data/external/photos            # data/external/photos/<hotel_id>/<space>/*.jpg (not in git)
+  interim: data/interim                   # generated, not in git
+  processed: data/processed               # generated, not in git (contains review text)
+  results: results                        # aggregated tables and the report; committed (no personal data)
+
+ingest:
+  # A property enters hotel-level analysis only with at least this many reviews that contain real text.
+  min_text_reviews_per_hotel: 50
+  # Names that identify private condo / apartment listings rather than hotels (regex, case-insensitive).
+  listing_name_patterns: ['\bapt\b', '\bstudio\b', '\bcondo\b', '\d{3,4}\s*-', '!', 'free parking', 'block away']
+
+text:
+  min_tokens_for_english: 3
+  # Bayesian shrinkage for hotel-level net sentiment: prior strength in pseudo-mentions.
+  sentiment_prior_strength: 10
+  # Convergence tests need variation: skip an aspect mentioned in fewer hotels than this.
+  min_hotels_with_mentions: 5
+  annotation_sample_size: 400        # reviews sampled for the human gold set
+  random_seed: 20241102
+
+llm:
+  # Claude model for review aspect extraction and photo coding.
+  model: claude-opus-5-5
+  effort: low                        # extraction is a simple task; raise to "medium" if validation F1 is low
+  max_tokens: 2000
+  batch_size: 10000                  # requests per Message Batch
+  prompt_version: absa-v1
+  vision_prompt_version: bdia-vlm-v1
+  vision_max_images_per_call: 8
+  vision_presence_threshold: 0.5     # an item is "present" in a space if any photo has confidence ≥ this
+
+bdia:
+  # Hotel groups of the thesis design (Wu 2024, §4.1 and §6.1), by "Hotel Number" in the coding form.
+  groups:
+    waikiki_4star_model: [1, 26]     # 26 Waikiki four-star hotels used to build the model
+    hawaii_4star_test: [27, 31]      # random four-star hotels elsewhere in Hawaii (location test)
+    lower_star_test: [32, 36]        # random 2–3-star hotels in Honolulu / Hawaii (star-rating test)
+  # New, transparent indices (docs/PRD.md §5.3). Legacy formulas live in config/legacy.yaml.
+  default_index: dimension_balanced  # one of: equal_items, dimension_balanced
+  space_weights: {guestroom: 0.3333333333, lobby: 0.3333333333, lounge: 0.3333333333}
+
+models:
+  bootstrap_reps: 2000
+  permutation_reps: 5000
+  fdr_alpha: 0.05
+  cv_folds: 6                        # GroupKFold by hotel
+  random_seed: 20241102
+  hotel_outcomes: [booking_score, staff, facilities, cleanliness, comfort, value_for_money, location]

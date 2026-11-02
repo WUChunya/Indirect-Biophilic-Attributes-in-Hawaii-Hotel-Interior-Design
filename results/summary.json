@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "n": {
+    "reviews_raw": 35177,
+    "duplicates_dropped": 447,
+    "reviews_with_text": 19631,
+    "reviews_english": 17662,
+    "placeholder_or_empty": 15099,
+    "properties": 52,
+    "eligible_hotels": 33,
+    "bdia_hotels": 36,
+    "bdia_groups": {
+      "waikiki_4star_model": 26,
+      "hawaii_4star_test": 5,
+      "lower_star_test": 5
+    },
+    "bdia_hotels_spaces_identical": 2,
+    "overlap_hotels": 24
+  },
+  "legacy_repro": {
+    "scenario_max_abs_err": 3.3306690738754696e-16,
+    "index_max_abs_err": 2.220446049250313e-16,
+    "prediction_max_abs_err": 1.7763568394002505e-15,
+    "item_weight_sum": 0.999
+  },
+  "rf_audit": {
+    "rows": 78,
+    "hotels": 26,
+    "reported_test_r2": 0.732,
+    "row_split_test_r2_median": 0.06202815217390678,
+    "row_split_test_r2_p10": -0.8294295082304203,
+    "row_split_test_r2_p90": 0.47469469149389837,
+    "row_split_share_ge_reported": 0.03,
+    "grouped_cv_r2": 0.0827836775431876,
+    "r_in_sample": 0.7049096225344598,
+    "r_nested": 0.6059017290873094,
+    "null_r_mean": -0.0075490175614549605,
+    "null_r_p95": 0.3709794708621055
+  }
+}

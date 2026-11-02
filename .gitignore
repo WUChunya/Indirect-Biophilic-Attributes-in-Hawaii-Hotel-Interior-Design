@@ -1,0 +1,32 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build output
+dist/
+build/
+*.egg-info/
+
+# Dependencies / caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Secrets
+.env
+*.key
+
+# Generated data: contains review text → local only. data/raw/ (thesis appendix) stays in git.
+data/interim/
+data/processed/
+# Hotel photos are copyrighted → local only; keep the folder README.
+data/external/*
+!data/external/README.md
+
+# Original images
+*.heic
+*.tif
+*.tiff

@@ -1,0 +1,121 @@
+# Review aspect lexicon for the rule-based baseline (src/biophilic/text/lexicon.py).
+# The LLM extractor (text/llm_absa.py) uses the same aspect IDs and definitions, so both methods are comparable.
+#
+# Derived from the 2024 keyword sheet (data/raw/reviews_booking_waikiki_2020-2023.xlsx → "Attributes and keywords"),
+# with these changes (reasons in docs/LEGACY_AUDIT.md §B):
+#   * terms   : high-precision terms; a match counts as a mention.
+#   * ambiguous: terms that usually mean something else in hotel reviews (e.g. "photos" = "the room looked like
+#                the photos", "smell" = bad odour, "sand" = the beach, colour words). Counted ONLY by the LLM method,
+#                and reported separately by the baseline so you can see how much noise they added in 2024.
+#   * exclude : regex patterns; a sentence matching one is not counted for that aspect.
+# Matching is case-insensitive, on word boundaries, and accepts a plural "s"/"es".
+
+aspects:
+  # --- Indirect biophilic attributes (the BDIA dimensions A–G) -------------------------------------
+  images_of_nature:
+    dimension: A
+    definition: Artwork, prints, murals or decor that depict nature.
+    terms: [painting, artwork, art work, mural, wall art, landscape photo, botanical print, floral print,
+            tropical print, scenic wallpaper, illustration, local art, art piece]
+    ambiguous: [photo, picture, print, floral, drawing, imagery, graphics]
+    exclude: ['(look|looked|looks|like|than|match|matched|as in|from) (the |in the )?(photo|picture)',
+              '(touch.?up|being|were|was|for|re-?|they.{0,10}) ?painting', 'painting (work|crew|the)', 'paint(ed|ing) (walls?|doors?|balcon)']
+  natural_materials:
+    dimension: B
+    definition: Wood, stone, bamboo, rattan, natural fibres and other natural materials.
+    terms: [wood, wooden, timber, bamboo, rattan, wicker, teak, koa, stone, marble, granite, slate, lava rock,
+            jute, hemp, wool, leather, terracotta, clay]
+    ambiguous: [linen, sand, coral, cotton, silk, canvas, amber, ivory]
+    exclude: ['wood(en)? (floor|floors)? ?(creak|creaky|squeak)', "stone'?s'? ?throw", 'hale koa', 'koa (ave|avenue|attwood)']
+  natural_colors:
+    dimension: C
+    definition: Earth tones and nature-derived colour palettes.
+    terms: [earth tone, earthy, earth-toned, natural color, natural colour, neutral tone, muted tone, pastel,
+            colour palette, color palette, colour scheme, color scheme, ocean blue, sea green, sage]
+    ambiguous: [blue, green, brown, red, yellow, white, black, gray, grey, orange, pink, tan, olive, gold,
+                beige, teal, navy]
+    exclude: []
+  natural_light_air:
+    dimension: D
+    definition: Daylight, operable windows, balconies/lanai, breezes, shading, soft or indirect lighting (BDIA D01–D04).
+    terms: [natural light, daylight, sunlight, sunlit, light-filled, bright and airy, airy, breeze, breezy,
+            fresh air, sea breeze, trade wind, open window, windows open, sliding door, shutter, louvre, louver,
+            blinds, blackout curtain, balcony, lanai, soft lighting, ambient lighting, mood lighting, indirect lighting]
+    ambiguous: [lamp, shade, shades, shadow, well-lit, sunny, light]
+    exclude: ['blinds? (broken|missing)']
+  naturalistic_shapes:
+    dimension: E
+    definition: Organic, curved or irregular natural forms in furniture, finishes or decor.
+    terms: [organic shape, organic form, curved, curvy, curves, biomorphic, freeform, free-form, sculptural,
+            wave-shaped, pebble]
+    ambiguous: [rounded, organic, wave, irregular, asymmetrical]
+    exclude: []
+  age_patina:
+    dimension: F
+    definition: Vintage, retro, historic or crafted character; materials that age gracefully.
+    terms: [vintage, retro, mid-century, midcentury, nostalgic, nostalgia, historic, historical, heritage,
+            old hawaii, old-world, antique, rustic, weathered, patina, reclaimed, recycled, upcycled,
+            handcrafted, hand-crafted, handmade, hand-made, craftsmanship, woven, lauhala]
+    ambiguous: [classic, timeless, old school, old style, character]
+    exclude: []
+  natural_geometries:
+    dimension: G
+    definition: Abstract or geometric patterns that echo nature (leaf, wave, fractal, honeycomb).
+    terms: [leaf pattern, wave pattern, tropical pattern, fractal, honeycomb, hexagonal, fish scale, motif]
+    ambiguous: [pattern, geometric, texture, textured]
+    exclude: []
+  # --- Related constructs used in the thesis -------------------------------------------------------
+  hawaiian_local:
+    dimension: LOCAL
+    definition: Hawaiian / local cultural identity in the design (Local Attachment in the survey).
+    terms: [hawaiian style, hawaiian decor, hawaiian theme, hawaiian touch, hawaiian vibe, hawaiian feel,
+            aloha spirit, polynesian, tiki, local artist, island style, island vibe, plantation style, old hawaii]
+    ambiguous: [hawaiian, hawaii, aloha, local, island]
+    exclude: ["tiki'?s (bar|grill|restaurant)", 'tiki bar', 'polynesian (hostel|residences|beach club|cultural)']
+  sensory_ambience:
+    dimension: EVOKE
+    definition: Scent, sound and overall ambience (Kellert "evoking nature").
+    terms: [scent, fragrance, aroma, aromatic, plumeria, ambience, ambiance, atmosphere, vibe]
+    ambiguous: [smell, music, sound]
+    exclude: []
+  # --- Controls: direct nature, condition, design in general --------------------------------------
+  direct_nature:
+    dimension: DIRECT
+    definition: Direct experience of nature (views, plants, water, outdoors). Not BDIA; a confounder to control.
+    terms: [ocean view, sea view, beach view, garden, plant, greenery, tree, palm tree, flower, orchid,
+            koi, waterfall, courtyard, diamond head view, sunset]
+    ambiguous: [view, pool, beach, ocean, nature]
+    exclude: []
+  condition:
+    dimension: CONDITION
+    definition: Physical condition and age of the property (renovated vs dated). A confounder for "patina".
+    terms: [dated, outdated, old-fashioned, run down, run-down, rundown, worn, tired, shabby, renovated,
+            newly renovated, refurbished, updated, modernized, modernised, brand new, needs renovation]
+    ambiguous: [old, new, aged]
+    exclude: []
+  design_general:
+    dimension: DESIGN
+    definition: Interior design, décor and style in general.
+    terms: [decor, décor, interior design, interior, design, stylish, aesthetic, furnishings, furniture,
+            boutique]
+    ambiguous: [style, look, layout]
+    exclude: []
+
+# Spaces, to locate a mention (guest room vs lobby vs lounge) — matched in the same sentence.
+spaces:
+  guestroom: [room, guest room, suite, bedroom, bathroom, bed, studio]
+  lobby: [lobby, reception, entrance, front desk, check-in area]
+  lounge: [restaurant, bar, lounge, cafe, café, dining, breakfast area, rooftop]
+
+# Booking.com placeholders and "nothing to dislike" answers.
+placeholders:
+  - There are no comments available for this review
+null_answers: [nothing, none, n/a, "na", nil, "no", "-", ".", no complaints, nothing to complain, all good,
+               everything was great, everything was perfect, nothing really, not applicable, nothing at all]
+
+# Booking.com auto-titles (the score label shown when the guest wrote no title). Not sentiment-bearing text.
+auto_titles: [Exceptional, Superb, Fabulous, Very good, Good, Pleasant, Review score, Okay, Passable,
+              Disappointing, Poor, Very poor, Bad, Very bad]
+
+negators: [not, "no", never, "n't", without, hardly, barely, lack, lacking, nothing]
+negation_window: 3

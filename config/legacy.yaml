@@ -1,0 +1,77 @@
+# The 2024 BDIA-Index formulas, kept ONLY to reproduce and audit the thesis numbers (docs/LEGACY_AUDIT.md §A).
+# Do not use these weights for new analysis: they are Random Forest feature importances learned against the
+# same Booking.com Overall Score they are later used to predict (target leakage).
+
+# (1) Weights actually used in data/raw/bdia_coding_36_hotels.xlsx (column BDIA-Scenario).
+#     Recovered by exact least squares: reproduces every row to 1e-15. Sum = 0.999.
+spreadsheet_item_weights:
+  A01: 0.033
+  A02: 0.021
+  A03: 0.030
+  B01: 0.036
+  B02: 0.027
+  B03: 0.093
+  B04: 0.044
+  B05: 0.008
+  B06: 0.047
+  C01: 0.005
+  C02: 0.019
+  C03: 0.027
+  C04: 0.013
+  C05: 0.018
+  C06: 0.018
+  D01: 0.036
+  D02: 0.018
+  D03: 0.063
+  D04: 0.008
+  E01: 0.014
+  E02: 0.010
+  E03: 0.036
+  F01: 0.018
+  F02: 0.035
+  F03: 0.014
+  F04: 0.013
+  G01: 0.231
+  G02: 0.026
+  G03: 0.038
+
+# Space weights recovered from the spreadsheet (BDIA-Index = Σ w_space × BDIA-Scenario_space), exact.
+spreadsheet_space_weights: {lobby: 0.368, guestroom: 0.285, lounge: 0.347}
+
+# Booking Score Prediction column in the spreadsheet = intercept + slope × BDIA-Index (exact).
+spreadsheet_prediction: {intercept: 7.304, slope: 1.911}
+
+# (2) Formula published in the EDRA55 handbook (16 items; Random Forest importances, slide "FINAL RESULT").
+handbook_item_weights:
+  A01: 0.056
+  A03: 0.030
+  B01: 0.050
+  B03: 0.060
+  B04: 0.054
+  B06: 0.103
+  C01: 0.045
+  C03: 0.052
+  D01: 0.050
+  D03: 0.061
+  E03: 0.070
+  F01: 0.030
+  F02: 0.048
+  G01: 0.180
+  G02: 0.068
+  G03: 0.042
+# Note the different space order compared with the spreadsheet.
+handbook_space_weights: {guestroom: 0.368, lounge: 0.285, lobby: 0.347}
+handbook_prediction: {intercept: 7.292, slope: 1.854}
+
+# Random Forest settings reported on the EDRA55 slide (used by models/legacy_rf.py to replicate them).
+random_forest:
+  n_estimators: 100
+  criterion: squared_error
+  min_samples_split: 2
+  min_samples_leaf: 1
+  max_depth: null
+  max_features: 1.0      # "auto" in old scikit-learn = all features for regression
+  bootstrap: true
+  oob_score: true
+  train_fraction: 0.9
+  reported: {train_r2: 0.961, test_r2: 0.732}

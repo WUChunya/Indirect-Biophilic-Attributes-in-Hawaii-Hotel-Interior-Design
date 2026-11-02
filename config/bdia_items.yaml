@@ -1,0 +1,235 @@
+# BDIA instrument (Biophilic Design Indirect Attributes), version 3 / final, as used in the 2024 thesis.
+# Source: data/raw/bdia_instrument_scoresheet.xlsx, data/raw/survey_instrument_and_results.xlsx (Sheet3),
+#         docs/papers/Indirect_Biophilic_Design_Handbook_EDRA55_2024.pdf.
+# Framework: Kellert & Calabrese (2015), "Indirect experience of nature" attributes.
+#
+# code         : stable ID used everywhere in the new pipeline (= survey / handbook code A01..G03)
+# legacy_code  : column name in data/raw/bdia_coding_36_hotels.xlsx
+# element      : building element the item is judged on
+# visual_cues  : what a coder (human or VLM) should look for in a photo; used to build the VLM prompt
+# not_this     : common confusions; also passed to the VLM
+#
+# Known inconsistencies in the 2024 sources (see docs/LEGACY_AUDIT.md §A6):
+#   - the scoresheet lists "The floors are made of natural materials" twice (B04 and B05); B05 is furniture
+#     according to the survey sheet ("Natural materials Furnitures").
+#   - the handbook labels C05 = decorations and C06 = furniture; the survey sheet says the opposite.
+#     We follow the survey sheet / coding form (NC-FU = C05 furniture, NC-DE = C06 decorations).
+
+spaces:
+  guestroom: {label: "Typical guest room", legacy_column: Guestroom}
+  lobby: {label: "Lobby / main entrance", legacy_column: Lobby}
+  lounge: {label: "Lounge / restaurant / bar (public F&B space)", legacy_column: Lounge}
+
+dimensions:
+  A: Images of nature
+  B: Natural materials
+  C: Natural colors
+  D: Simulating natural light and air
+  E: Naturalistic shapes and forms
+  F: Age, change, and the patina of time
+  G: Natural geometries
+
+items:
+  - code: A01
+    legacy_code: NI-FI
+    dimension: A
+    element: wall finishes / wall art
+    definition: Wall paintings or decorative paintings contain direct natural scenes (such as landscape photos).
+    visual_cues: framed art, murals or wallpaper that depict landscapes, ocean, plants, animals or flowers
+    not_this: abstract art with no natural subject; a real window view
+  - code: A02
+    legacy_code: NI-SO
+    dimension: A
+    element: soft furnishings
+    definition: Carpets, pillows, curtains and other fabrics contain direct natural scenes (such as cartoon cat pillows).
+    visual_cues: botanical, floral, leaf, animal or seascape motifs printed or woven on rugs, cushions, curtains, bedding
+    not_this: plain fabrics; purely geometric patterns (those belong to G03)
+  - code: A03
+    legacy_code: NI-DE
+    dimension: A
+    element: decorations
+    definition: Use decorations with natural forms (such as ceramic rockeries).
+    visual_cues: sculptures or objects that represent natural things (shells, coral, rocks, birds, artificial plants)
+    not_this: live plants or real water features (direct nature, not coded here)
+  - code: B01
+    legacy_code: NM-FI
+    dimension: B
+    element: walls / columns
+    definition: Background walls, columns and other hard wall decorations are made of natural materials.
+    visual_cues: wood panelling, stone or lava-rock cladding, bamboo, rattan or grass-cloth wall coverings
+    not_this: painted drywall or printed wood-look laminate where clearly artificial
+  - code: B02
+    legacy_code: NM-WI
+    dimension: B
+    element: windows / shading / balcony railing
+    definition: Window frames, sun visors and balcony railings are made of natural materials.
+    visual_cues: timber window frames, wooden shutters or louvres, wooden balcony railings
+    not_this: aluminium frames, glass or metal railings
+  - code: B03
+    legacy_code: NM-CE
+    dimension: B
+    element: ceiling
+    definition: The ceiling is made of natural materials.
+    visual_cues: exposed timber beams, wood slat or bamboo ceilings, woven or thatched ceilings
+    not_this: white gypsum or acoustic tile ceilings
+  - code: B04
+    legacy_code: NM-FL
+    dimension: B
+    element: floor
+    definition: The floors are made of natural materials.
+    visual_cues: hardwood, stone, marble or terrazzo with natural aggregate, natural-fibre rugs covering the floor
+    not_this: wall-to-wall synthetic carpet, vinyl or ceramic tile with printed pattern
+  - code: B05
+    legacy_code: NM-FU
+    dimension: B
+    element: furniture
+    definition: Furniture is made of natural materials.
+    visual_cues: solid wood, rattan, wicker, cane, leather or stone furniture
+    not_this: metal, plastic or fully upholstered synthetic furniture
+  - code: B06
+    legacy_code: NM-DE
+    dimension: B
+    element: decorations
+    definition: Decorations are made of natural materials.
+    visual_cues: wooden bowls, woven baskets, shells, stone objects, woven lamp shades, wooden carvings
+    not_this: plastic or glass decor
+  - code: C01
+    legacy_code: NC-FI
+    dimension: C
+    element: walls / columns
+    definition: The hard decoration of the background wall, pillars and other walls are in natural colors.
+    visual_cues: muted earth tones (sand, beige, warm grey, terracotta, sage, ocean blue) dominating the walls
+    not_this: saturated artificial colours (neon, hot pink, bright purple) or pure stark white everywhere
+  - code: C02
+    legacy_code: NC-WI
+    dimension: C
+    element: windows / shading / balcony railing
+    definition: Window frames, sun visors and balcony railings are in natural colours.
+    visual_cues: wood-coloured, sand, bronze or earth-toned frames and shading
+    not_this: bright artificial colours
+  - code: C03
+    legacy_code: NC-CE
+    dimension: C
+    element: ceiling
+    definition: The ceilings are in natural colours.
+    visual_cues: wood tones or earth-toned ceilings
+    not_this: plain white ceilings (code 0 unless clearly warm natural tone)
+  - code: C04
+    legacy_code: NC-FL
+    dimension: C
+    element: floor
+    definition: The floors are in natural colours.
+    visual_cues: wood, stone, sand or earth-toned floor or carpet
+    not_this: saturated or high-contrast artificial colours
+  - code: C05
+    legacy_code: NC-FU
+    dimension: C
+    element: furniture
+    definition: Furniture is in natural colours.
+    visual_cues: furniture in wood, sand, olive, ocean blue, cream or other muted natural tones
+    not_this: bright artificial colours
+  - code: C06
+    legacy_code: NC-DE
+    dimension: C
+    element: decorations
+    definition: Decorations are in natural colors.
+    visual_cues: decor and textiles in muted natural tones
+    not_this: bright artificial colours
+  - code: D01
+    legacy_code: SN-WI
+    dimension: D
+    element: windows
+    definition: Adjustable sash windows allow for natural ventilation.
+    visual_cues: openable windows, sliding glass doors to a lanai or balcony, open-air walls
+    not_this: fixed curtain wall glazing with no visible openable part
+  - code: D02
+    legacy_code: SN-SU
+    dimension: D
+    element: shading
+    definition: Adjustable sun visors or blinds (or balconies).
+    visual_cues: operable blinds, shutters, louvres, sheer and blackout curtains, balcony overhangs
+    not_this: no shading device visible
+  - code: D03
+    legacy_code: SN-IN
+    dimension: D
+    element: lighting
+    definition: Use indirect ambient light.
+    visual_cues: cove lighting, wall washers, concealed LED strips, uplights; light source not directly visible
+    not_this: only exposed downlights or ceiling fixtures
+  - code: D04
+    legacy_code: SN-SO
+    dimension: D
+    element: lighting
+    definition: Lamp with soft lighting effect.
+    visual_cues: table or floor lamps with fabric or woven shades, warm diffused light
+    not_this: bare bulbs or harsh task lights
+  - code: E01
+    legacy_code: NS-FU
+    dimension: E
+    element: furniture
+    definition: The furniture adopts irregular natural forms.
+    visual_cues: organic, curved, pebble-like, leaf- or wave-shaped furniture
+    not_this: rectilinear furniture with rounded corners only
+  - code: E02
+    legacy_code: NS-FI
+    dimension: E
+    element: walls / ceilings
+    definition: Hard decoration (walls, ceilings, etc.) adopts irregular natural forms.
+    visual_cues: undulating walls or ceilings, organic openings, cave- or wave-like surfaces
+    not_this: flat orthogonal surfaces
+  - code: E03
+    legacy_code: NS-DE
+    dimension: E
+    element: decorations
+    definition: The decorations adopt irregular natural forms.
+    visual_cues: organic-shaped lamps, mirrors, vases, sculptures
+    not_this: regular geometric decor
+  - code: F01
+    legacy_code: AC-EL
+    dimension: F
+    element: style
+    definition: There are nostalgic elements in the decoration style (such as 90s posters).
+    visual_cues: vintage posters, retro or mid-century furniture, historic photos, old-Hawaii surf culture objects
+    not_this: worn-out or poorly maintained finishes (that is condition, not design)
+  - code: F02
+    legacy_code: AC-CR
+    dimension: F
+    element: craftsmanship
+    definition: The decorative style includes nostalgic craftsmanship (such as bamboo weaving and hand binding).
+    visual_cues: hand-woven lauhala, kapa or tapa patterns, hand-carved wood, macrame, rope binding
+    not_this: machine-made items imitating craft only by print
+  - code: F03
+    legacy_code: AC-RE
+    dimension: F
+    element: materials
+    definition: Use recycled materials, furniture or decor.
+    visual_cues: reclaimed wood, salvaged objects, upcycled furniture (often only identifiable from captions)
+    not_this: new materials made to look old
+  - code: F04
+    legacy_code: AC-WE
+    dimension: F
+    element: materials
+    definition: Use materials that will show natural weathering or aging (such as copper).
+    visual_cues: copper, brass, weathered timber, raw stone, leather that patinates
+    not_this: chrome, plastic, lacquer
+  - code: G01
+    legacy_code: NG-FU
+    dimension: G
+    element: furniture
+    definition: The furniture adopts abstract and geometric patterns that imitate nature.
+    visual_cues: furniture with fractal, branching, hexagonal, wave or leaf-vein patterns
+    not_this: plain furniture; figurative nature images (those are A)
+  - code: G02
+    legacy_code: NG-FI
+    dimension: G
+    element: walls / ceilings
+    definition: Hard decoration (walls, ceilings, etc.) adopts abstract and geometric patterns that imitate nature.
+    visual_cues: wall or ceiling patterns such as fish-scale, honeycomb, wave, branching or fractal geometry
+    not_this: plain surfaces; figurative murals (A01)
+  - code: G03
+    legacy_code: NG-SO
+    dimension: G
+    element: decorations / soft furnishings
+    definition: Decorations and soft furnishings adopt abstract and geometric patterns that imitate nature.
+    visual_cues: abstract leaf, wave, shell or fractal patterns on textiles and decor
+    not_this: figurative nature prints (A02)
